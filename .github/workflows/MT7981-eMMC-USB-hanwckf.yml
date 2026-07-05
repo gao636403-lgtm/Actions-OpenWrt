@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 ###############手动修改##############
-name: MT7981-eMMC-USB-hanwckf
+name: RAX3000M-NAND-hanwckf
 
 on:
   repository_dispatch:
@@ -72,11 +72,11 @@ env:
   ###############手动修改##############
   ##手动设置上传时候的打包名称和tag名称UPLOAD_TAG_NAME
   OPENWRT_NAME: hanwckf
-  UPLOAD_TAG_NAME: mt7981-emmc-usb
+  UPLOAD_TAG_NAME: rax3000m-nand
   REPO_URL: https://github.com/lgs2007m/immortalwrt-mt798x
   REPO_BRANCH: ${{ github.event.inputs.REPO_BRANCH || 'v7672' }}
   FEEDS_CONF: MT7981-eMMC-USB-hanwckf/feeds.conf.default
-  CONFIG_FILE: MT7981-eMMC-USB-hanwckf/.mtwifi-cfg.config
+  CONFIG_FILE: MT7981-eMMC-USB-hanwckf/.rax3000m-nand.config
   DIY_P1_SH: MT7981-eMMC-USB-hanwckf/diy-part1.sh
   DIY_P2_SH: MT7981-eMMC-USB-hanwckf/diy-part2.sh
   SSH_ACTIONS: false
@@ -151,13 +151,6 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
-    - name: 设置RAX3000M-eMMC的eMMC使用highspeed
-      run: |
-        cd openwrt
-        DTS_FILE=$(find target/linux/mediatek -name "mt7981-cmcc-rax3000m-emmc.dts" | head -n 1)
-        if [ -f "$DTS_FILE" ] && ! grep -q 'cap-mmc-highspeed' "$DTS_FILE"; then
-                sed -i -e '/bus-width = <8>;/ a\	cap-mmc-highspeed;' "$DTS_FILE"
-        fi
 
     - name: 设置LAN IP地址（路由器登录地址）
       run: |
